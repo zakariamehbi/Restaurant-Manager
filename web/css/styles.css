@@ -1,0 +1,45 @@
+body {
+	background-color: #fafafa;
+	padding-top: 10px;
+	padding-left: 20px;
+	padding-bottom: 50px;
+}
+
+input:valid {
+	background-color: lightGreen;
+}
+
+input:invalid {
+	background-color: lightPink;
+}
+
+button:disabled {
+	color: lightGrey;
+}
+
+.table-style {
+	min-height: 86px;
+	position: relative;
+	border-top: 0;
+	width: 80%;
+}
+
+#wrapper {
+	display: table;
+	width: 70%;
+}
+
+#first {
+	display: table-cell;
+	width: 33%;
+}
+
+#second {
+	display: table-cell;
+	width: 33%;
+}
+
+#third {
+	display: table-cell;
+	width: 34%;
+}

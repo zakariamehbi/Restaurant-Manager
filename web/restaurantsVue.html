@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			content="width=device-width,initial-scale=1,minimal-ui"
+			name="viewport"
+		/>
+		<title>Restaurants Vue.js</title>
+		<script src="lib/vue.min.js"></script>
+		<script src="lib/lodash.min.js"></script>
+		<link rel="stylesheet" href="css/styles.css" />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/vue-material@beta/dist/vue-material.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://unpkg.com/vue-material@beta/dist/theme/default.css"
+		/>
+		<script src="https://unpkg.com/vue-material@beta"></script>
+		<script src="js/components/restaurants.js"></script>
+		<script src="js/restaurantsVueJS.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<div id="wrapper">
+				<div id="first">
+					<h2>Ajouter restaurant</h2>
+					<form
+						style="width:300px; padding: 25px; border: 1px solid grey"
+						v-on:submit="ajouterRestaurant(event)"
+					>
+						<template>
+							<div>
+								<md-field>
+									<label>Nom</label>
+									<md-input
+										type="text"
+										name="nom"
+										required
+										v-model="nom"
+									>
+									</md-input>
+								</md-field>
+								<md-field>
+									<label>Cuisine</label>
+									<md-input
+										type="text"
+										name="cuisine"
+										required
+										v-model="cuisine"
+									>
+									</md-input>
+								</md-field>
+								<md-button
+									type="submit"
+									class="md-raised md-primary"
+								>
+									Ajouter
+								</md-button>
+							</div>
+						</template>
+					</form>
+				</div>
+
+				<div id="second">
+					<h2>Chercher restaurant par nom</h2>
+					<div
+						style="width:300px; padding: 25px; border: 1px solid grey"
+					>
+						<template>
+							<div>
+								<md-field>
+									<label>Nom</label>
+									<md-input
+										required
+										type="text"
+										v-model="nomRecherche"
+										v-on:input="chercherRestaurants()"
+									>
+									</md-input>
+								</md-field>
+							</div>
+						</template>
+					</div>
+				</div>
+
+				<div id="third" v-if="updateForm === true">
+					<h2>Modifier restaurants</h2>
+					<form
+						style="width:300px; padding: 25px; border: 1px solid grey"
+						v-on:submit="modifierRestaurant(event)"
+					>
+						<template>
+							<div>
+								<md-field>
+									<label>Nom</label>
+									<md-input
+										type="text"
+										name="nom"
+										required
+										v-model="updateName"
+									>
+									</md-input>
+								</md-field>
+								<md-field>
+									<label>Cuisine</label>
+									<md-input
+										type="text"
+										name="cuisine"
+										required
+										v-model="updateCuisine"
+									>
+									</md-input>
+								</md-field>
+								<md-button
+									type="submit"
+									class="md-raised md-primary"
+								>
+									Modifier
+								</md-button>
+							</div>
+						</template>
+					</form>
+				</div>
+			</div>
+
+			<hr />
+
+			<h2>Nombre de restaurants : {{ fractionCount }}</h2>
+			<h2>Page courante : {{ page }}</h2>
+			<p>
+				Nb restaurants par page :
+				<input
+					type="range"
+					value="10"
+					min="1"
+					v-bind:max="count"
+					step="1"
+					v-on:input="onChange()"
+					v-model="pagesize"
+				/>
+				{{ pagesize }}
+			</p>
+			<md-button
+				class="md-raised"
+				v-on:click="pagePrecedente()"
+				v-bind:disabled="page == 0"
+			>
+				{{ prec }}
+			</md-button>
+			<md-button
+				class="md-raised"
+				v-on:click="pageSuivante()"
+				v-bind:disabled="page == maxPage"
+			>
+				{{ suiv }}
+			</md-button>
+			<md-button disabled>...</md-button>
+			<md-button
+				class="md-raised"
+				v-on:click="lastPage()"
+				v-bind:disabled="page == maxPage"
+			>
+				{{ last }}
+			</md-button>
+
+			<hr />
+
+			<template>
+				<div class="table-style">
+					<md-table
+						v-model="restaurants"
+						md-sort="name"
+						md-sort-order="asc"
+						md-card
+						md-fixed-header
+					>
+						<md-table-toolbar>
+							<h1 class="md-title">Restaurants</h1>
+						</md-table-toolbar>
+
+						<md-table-row
+							slot="md-table-row"
+							slot-scope="{ item  }"
+						>
+							<md-table-cell md-label="Nom" md-sort-by="nom">
+								{{ item.name }}
+							</md-table-cell>
+							<md-table-cell
+								md-label="Cuisine"
+								md-sort-by="cuisine"
+							>
+								{{ item.cuisine }}
+							</md-table-cell>
+							<md-table-cell md-label="Actions">
+								<md-button
+									class="md-raised md-primary"
+									v-on:click="updateShowForm(item)"
+								>
+									Modifer
+								</md-button>
+								<md-button
+									class="md-raised md-accent"
+									v-on:click="supprimerRestaurant(item)"
+								>
+									Supprimer
+								</md-button>
+							</md-table-cell>
+						</md-table-row>
+					</md-table>
+				</div>
+			</template>
+		</div>
+	</body>
+</html>
